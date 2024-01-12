@@ -16,6 +16,10 @@ var questionsBank = {
     }
 };
 
+// variable to store user answer
+var answer = 0
+
+// function to show question and hide start
 function showQuestion() {
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
@@ -26,6 +30,7 @@ function showQuestion() {
     document.querySelector('#question-title').append(qTitle);
 
     const choices = JSON.parse(JSON.stringify(question.choices));
+    answer = JSON.stringify(question.answer);
     const choicesList = document.createElement('ul');
     for (var i = 0; i < choices.length; i++){
         const choice = document.createElement('ol');
@@ -38,5 +43,18 @@ function showQuestion() {
 
 document.querySelector('#start').addEventListener('click', showQuestion);
 
-
-document.querySelector('')
+// function to check answer
+function checkAnswer(event) {
+    var choiceClicked = event.target;
+    var choiceNumber = choiceClicked.dataset.number;
+    console.log(choiceNumber);
+    const choiceAnswer = document.createElement('span');
+    if (answer == choiceNumber){
+        choiceAnswer.innerHTML = 'Correct';
+    }
+    else {
+        choiceAnswer.innerHTML = 'Wrong';
+    }
+    document.querySelector('#questions').append(choiceAnswer);
+};
+document.querySelector('#choices').addEventListener('click', checkAnswer);
