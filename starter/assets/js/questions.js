@@ -1,51 +1,62 @@
 var questionBank = [
     {
-        title: 'Which of the following is not a valid JavaScript loop statement?',
-        choices: ['for', 'while', 'do…while', 'until'],
+        title: 'With JavaScript, which of the following is true if x and y are not equal?',
+        choices: ['if x!=y', 'if (x!=y)', 'if x not=y'],
+        answer: 2
+    },
+    {
+        title: 'With JavaScript, the first control statement in a for loop usually does what?',
+        choices: ['sets the termination condition', 'increments a counter', 'creates a control variable'],
+        answer: 3
+    },
+    {
+        title: ' What is the correct JavaScript syntax to change the content of the HTML element below? <p id="demo">This is a demonstration</p>',
+        choices: ['document.getElementByName("p").innerHTML = "Hello World";', 'document.getElementById("demo").innerHTML = "Hello World";', 'document.getElement("p").innerHTML = "Hello World";', '#demo.innerHTML = "Hello World";'],
+        answer: 2
+    },
+    {
+        title: 'How many buttons are there in a JavaScript alert box?',
+        choices: ['One', 'Two', 'None'],
+        answer: 2
+    },
+    {
+        title: ' Which event is triggered when a form field is changed?',
+        choices: ['onsubmit', 'onblur', 'onclick', 'onchange'],
         answer: 4
     },
     {
-        title: 'What is the purpose of the splice() method in JavaScript?',
-        choices: ['To add elements to an array', 'To remove elements from an array', 'To replace elements in an array', 'All of the above'],
-        answer: 4
+        title: "With JavaScript, look at the following code: var x='Anna'; var y=30; x=y; Variable 'x' now contains?",
+        choices: ['a text', 'a number', 'a boolean'],
+        answer: 1
     },
     {
-        title: 'What is the result of the following code? var x = 5; x++;',
-        choices: ['x is now 4', 'x is now 5', 'x is now 6', 'None of the above'],
-        answer: 4
+        title: "With JavaScript, how do you round the number 7.25 to the nearest integer?",
+        choices: ['Math.round(7.25)', 'Math.floor(7.25)', 'Math.ceil(7.25)'],
+        answer: 1
     },
     {
-        title: 'Which of the following is not a valid JavaScript loop statement?',
-        choices: ['for', 'while', 'do…while', 'until'],
-        answer: 4
-    },
-    {
-        title: 'What is the purpose of the splice() method in JavaScript?',
-        choices: ['To add elements to an array', 'To remove elements from an array', 'To replace elements in an array', 'All of the above'],
-        answer: 4
-    },
-    {
-        title: 'What is the result of the following code? var x = 5; x++;',
-        choices: ['x is now 4', 'x is now 5', 'x is now 6', 'None of the above'],
-        answer: 4
+        title: "With JavaScript, how can you find the number with the highest value of x and y?",
+        choices: ['Math.max(x,y)', 'Math.ceil(x,y)', 'Math.top(x,y)'],
+        answer: 1
     }
 ];
 
+var startBtn = document.querySelector('#start');
+var qChosen = [];
 var questionTitle = document.querySelector('#question-title');
 var multiChoices = document.querySelector('#choices');
 var questionsDiv = document.querySelector('#questions');
+// variable to store user answer
+var answer = 0;
 
-;
+// function to show and hide divs on the page
 function changeClass(id, currentClass, newClass) {
     document.querySelector(id).classList.remove(currentClass);
     document.querySelector(id).classList.add(newClass);
 };
 
-
-// variable to store user answer
-var answer = 0
-
-document.querySelector('#start').addEventListener('click', function () {
+// start quiz
+startBtn.addEventListener('click', function () {
     showQuestion(questionBank[0]);
 });
 
@@ -69,6 +80,9 @@ function showQuestion(question) {
         choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
         choicesList.append(choice);
     };
+    if (!newDiv) {
+        
+    }
     var newDiv = document.createElement('div');
     newDiv.setAttribute("id", "correct");
     multiChoices.append(newDiv);
@@ -84,17 +98,28 @@ function showQuestion(question) {
             }
         });
 };
-
+var qChosen = [];
 function runQuiz(qBank) {
+    
     multiChoices.addEventListener('click', function () {
         var question = qBank[Math.floor(Math.random() * qBank.length)];
-        questionTitle.textContent = "";
-        multiChoices.textContent = "";
-        showQuestion(question);
+        if (qChosen.includes(question.title)) {
+            question = qBank[Math.floor(Math.random() * qBank.length)];
+        }
+        else {
+            questionTitle.textContent = "";
+            multiChoices.textContent = "";
+            showQuestion(question);
+        }
+        if (qChosen.length === qBank.length) {
+            changeClass('#questions', 'visible', 'hide');
+            changeClass('#end-screen', 'hide', 'visible');
+            return;
+        }
+        qChosen.push(question.title);
     });
 };
 
-
-
+runQuiz(questionBank);
 
 
