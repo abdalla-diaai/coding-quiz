@@ -57,6 +57,7 @@ var answer = 0;
 var score = 0;
 var quizFinished = false;
 var timerCount;
+var userAnswer = "";
 
 // audio sounds
 let correct = new Audio('assets/sfx/correct.wav')
@@ -101,12 +102,12 @@ function changeQuestions(qBank) {
             var choiceNumber = choiceClicked.dataset.number;
             if (choiceNumber === answer) {
                 score += 10;
-                answerCheck.textContent = 'Correct';
+                userAnswer = 'Correct';
                 // play correct sound
                 correct.play()
             }
             else {
-                answerCheck.textContent = "Incorrect";
+                userAnswer = "Incorrect";
                 // play incorrect sound
                 incorrect.play()
                 timerCount -= 10;
@@ -128,6 +129,7 @@ function changeQuestions(qBank) {
             quizFinished = true;
             finishQuiz();
         };
+        answerCheck.textContent = userAnswer;
     });
 };
 
