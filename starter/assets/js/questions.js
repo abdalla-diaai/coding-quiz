@@ -68,14 +68,13 @@ function changeClass(id, currentClass, newClass) {
     document.querySelector(id).classList.add(newClass);
 };
 
-// start quiz
+// start quiz, hide start screen div, show questions div, choose first question
 function startQuiz() {
     timerCount = 20;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
-    showQuestion(questionBank[0]);
+    showQuestion(questionBank.pop());
     startTimer();
-
 };
 startBtn.addEventListener('click', startQuiz);
 
@@ -93,6 +92,7 @@ function showQuestion(question) {
     };
 };
 
+// run quiz, choose question and remove it from bank
 function runQuiz(qBank) {
 
     multiChoices.addEventListener('click', function (event) {
@@ -130,7 +130,7 @@ function runQuiz(qBank) {
 
 runQuiz(questionBank);
 
-// The setTimer function starts and stops the timer and triggers winGame() and loseGame()
+// function to start timer, finish quiz if timer reaches zero or questions finished.
 function startTimer() {
     // Sets timer
     timer = setInterval(function () {
@@ -162,6 +162,7 @@ function startTimer() {
     }, 1000);
 };
 
+// add final score to DOM
 function finishQuiz() {
     changeClass('#questions', 'visible', 'hide');
     changeClass('#end-screen', 'hide', 'visible');
@@ -169,6 +170,7 @@ function finishQuiz() {
 };
 
 
+// hide end screen div and show feedback div
 function storeScore() {
     changeClass('#end-screen', 'visible', 'hide');
     changeClass('#feedback', 'hide', 'visible');
