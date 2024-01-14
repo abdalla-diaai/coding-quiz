@@ -57,12 +57,11 @@ var answer = 0;
 var score = 0;
 var quizFinished = false;
 var timerCount;
+var userAnswer = "";
 
 // audio sounds
 let correct = new Audio('assets/sfx/correct.wav')
 let incorrect = new Audio('assets/sfx/incorrect.wav')
-
-correct.play()
 
 // variables to get high score items
 var finalSubmit = document.querySelector('#submit');
@@ -89,7 +88,6 @@ function showQuestion(question) {
         choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
         multiChoices.append(choice);
     };
-    // to remove feedback to question after 1 second
 };
 
 // run quiz, choose question and remove it from questions bank
@@ -104,12 +102,12 @@ function changeQuestions(qBank) {
             var choiceNumber = choiceClicked.dataset.number;
             if (choiceNumber === answer) {
                 score += 10;
-                answerCheck.textContent = 'Correct';
+                userAnswer = 'Correct';
                 // play correct sound
                 correct.play()
             }
             else {
-                answerCheck.textContent = "Incorrect";
+                userAnswer = "Incorrect";
                 // play incorrect sound
                 incorrect.play()
                 timerCount -= 10;
@@ -131,6 +129,7 @@ function changeQuestions(qBank) {
             quizFinished = true;
             finishQuiz();
         };
+        answerCheck.textContent = userAnswer;
     });
 };
 
