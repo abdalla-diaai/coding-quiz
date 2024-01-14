@@ -163,17 +163,17 @@ function startTimer() {
 };
 
 function finishQuiz() {
-        changeClass('#questions', 'visible', 'hide');
-        changeClass('#end-screen', 'hide', 'visible');
-        finalScore.textContent = score;
+    changeClass('#questions', 'visible', 'hide');
+    changeClass('#end-screen', 'hide', 'visible');
+    finalScore.textContent = score;
 };
 
 
-function storeScore () {
+function storeScore() {
     changeClass('#end-screen', 'visible', 'hide');
     changeClass('#feedback', 'hide', 'visible');
-    localStorage.setItem("final-score", score);
     localStorage.setItem('user-initials', userInitials.value);
+    localStorage.setItem("final-score", score);
+    location.href = 'highscores.html';
 }
-
 finalSubmit.addEventListener('click', storeScore);
