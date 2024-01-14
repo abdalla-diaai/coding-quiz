@@ -1,4 +1,5 @@
-var questionBank = [
+// object to hold questions and answers
+var questionsBank = [
     {
         title: 'With JavaScript, which of the following is true if x and y are not equal?',
         choices: ['if x!=y', 'if (x!=y)', 'if x not=y'],
@@ -41,43 +42,37 @@ var questionBank = [
     }
 ];
 
+// variables to get page items
 var startBtn = document.querySelector('#start');
 var questionTitle = document.querySelector('#question-title');
 var multiChoices = document.querySelector('#choices');
 var questionsDiv = document.querySelector('#questions');
 var check = document.querySelector('#check');
-var choices = "";
 var quizTimer = document.querySelector('#time');
 var finalScore = document.querySelector('#final-score');
-// variable to store user answer
+
+// variables for functions
+var choices = "";
 var answer = 0;
 var question = "";
 var timerCount;
 var score = 0;
 var quizFinished = false;
+var answerCheck = "";
 
-
-// high score page
-finalSubmit = document.querySelector('#submit');
+// variables to get high score items
+var finalSubmit = document.querySelector('#submit');
 var userInitials = document.querySelector('#initials');
-
-
-// function to show and hide divs on the page
-function changeClass(id, currentClass, newClass) {
-    document.querySelector(id).classList.remove(currentClass);
-    document.querySelector(id).classList.add(newClass);
-};
 
 // start quiz, hide start screen div, show questions div, choose first question
 function startQuiz() {
     timerCount = 20;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
-    showQuestion(questionBank.pop());
+    showQuestion(questionsBank.pop());
     startTimer();
+    check.textContent = answerCheck;
 };
-startBtn.addEventListener('click', startQuiz);
-
 
 // function to show question and hide start
 function showQuestion(question) {
@@ -92,9 +87,8 @@ function showQuestion(question) {
     };
 };
 
-// run quiz, choose question and remove it from bank
-function runQuiz(qBank) {
-
+// run quiz, choose question and remove it from questions bank
+function changeQuestions(qBank) {
     multiChoices.addEventListener('click', function (event) {
         if (qBank.length === 0) {
             quizFinished = true;
@@ -103,19 +97,20 @@ function runQuiz(qBank) {
         if (event.target.matches('button') === true) {
             var choiceClicked = event.target;
             var choiceNumber = choiceClicked.dataset.number;
-
             if (choiceNumber === answer) {
-                score += 5;
+                score += 10;
+                answerCheck = "Correct";
             }
             else {
-                timerCount -= 5;
+                answerCheck = "Incorrect";
+                timerCount -= 10;
                 if (timerCount < 0) {
                     quizFinished = true;
                     finishQuiz();
                 }
             };
-
         };
+        check.textContent = answerCheck;
         questionTitle.textContent = "";
         multiChoices.textContent = "";
         if (!quizFinished) {
@@ -123,59 +118,15 @@ function runQuiz(qBank) {
         }
         else {
             quizFinished = true;
-            finishQuiz()
-        }
+            finishQuiz();
+        };
     });
 };
 
-runQuiz(questionBank);
+// start game when start button is clicked and show first question
+startBtn.addEventListener('click', startQuiz);
 
-// function to start timer, finish quiz if timer reaches zero or questions finished.
-function startTimer() {
-    // Sets timer
-    timer = setInterval(function () {
-        timerCount--;
-        if (timerCount > 0) {
-            quizTimer.textContent = timerCount;
-        }
-        else {
-            quizTimer.textContent = 0;
-        }
-        // Tests if time has run out
-        if (timerCount >= 0) {
-            if (quizFinished) {
-                clearInterval(timer);
-                finishQuiz()
-            };
-        }
-        else if (timerCount === 0) {
-            // Clears interval
-            clearInterval(timer);
-            finishQuiz()
-        }
-        else {
-            clearInterval(timer);
-            finishQuiz();
-        }
+// show next questions and check answers
+changeQuestions(questionsBank);
 
 
-    }, 1000);
-};
-
-// add final score to DOM
-function finishQuiz() {
-    changeClass('#questions', 'visible', 'hide');
-    changeClass('#end-screen', 'hide', 'visible');
-    finalScore.textContent = score;
-};
-
-
-// hide end screen div and show feedback div
-function storeScore() {
-    changeClass('#end-screen', 'visible', 'hide');
-    changeClass('#feedback', 'hide', 'visible');
-    localStorage.setItem('user-initials', userInitials.value);
-    localStorage.setItem("final-score", score);
-    location.href = 'highscores.html';
-}
-finalSubmit.addEventListener('click', storeScore);
