@@ -58,7 +58,6 @@ var question = "";
 var timerCount;
 var score = 0;
 var quizFinished = false;
-var answerCheck = "";
 
 // variables to get high score items
 var finalSubmit = document.querySelector('#submit');
@@ -71,7 +70,6 @@ function startQuiz() {
     changeClass('#questions', 'hide', 'visible');
     showQuestion(questionsBank.pop());
     startTimer();
-    check.textContent = answerCheck;
 };
 
 // function to show question and hide start
@@ -85,6 +83,10 @@ function showQuestion(question) {
         choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
         multiChoices.append(choice);
     };
+    // to remove feedback to question after 1 second
+    setTimeout(() => {
+        check.textContent = "";
+    }, 2000); 
 };
 
 // run quiz, choose question and remove it from questions bank
@@ -99,10 +101,10 @@ function changeQuestions(qBank) {
             var choiceNumber = choiceClicked.dataset.number;
             if (choiceNumber === answer) {
                 score += 10;
-                answerCheck = "Correct";
+                check.textContent = 'Correct';
             }
             else {
-                answerCheck = "Incorrect";
+                check.textContent = "Incorrect";
                 timerCount -= 10;
                 if (timerCount < 0) {
                     quizFinished = true;
@@ -110,7 +112,6 @@ function changeQuestions(qBank) {
                 }
             };
         };
-        check.textContent = answerCheck;
         questionTitle.textContent = "";
         multiChoices.textContent = "";
         if (!quizFinished) {

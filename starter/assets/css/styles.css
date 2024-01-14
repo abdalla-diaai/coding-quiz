@@ -88,5 +88,5 @@ li:nth-child(odd) {
 }
 
 #check {
-    border-block-start: #8570a5 1px solid;
+    border-block-end: #8570a5 solid 1px;
 }
