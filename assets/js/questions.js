@@ -58,6 +58,12 @@ var score = 0;
 var quizFinished = false;
 var timerCount;
 
+// audio sounds
+let correct = new Audio('assets/sfx/correct.wav')
+let incorrect = new Audio('assets/sfx/incorrect.wav')
+
+correct.play()
+
 // variables to get high score items
 var finalSubmit = document.querySelector('#submit');
 var userInitials = document.querySelector('#initials');
@@ -89,7 +95,6 @@ function showQuestion(question) {
 // run quiz, choose question and remove it from questions bank
 function changeQuestions(qBank) {
     multiChoices.addEventListener('click', function (event) {
-    
         if (qBank.length === 0) {
             quizFinished = true;
         };
@@ -100,9 +105,13 @@ function changeQuestions(qBank) {
             if (choiceNumber === answer) {
                 score += 10;
                 answerCheck.textContent = 'Correct';
+                // play correct sound
+                correct.play()
             }
             else {
                 answerCheck.textContent = "Incorrect";
+                // play incorrect sound
+                incorrect.play()
                 timerCount -= 10;
                 if (timerCount < 0) {
                     quizFinished = true;
