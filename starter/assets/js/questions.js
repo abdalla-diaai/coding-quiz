@@ -84,14 +84,12 @@ function showQuestion(question) {
         multiChoices.append(choice);
     };
     // to remove feedback to question after 1 second
-    setTimeout(() => {
-        answerCheck.textContent = "";
-    }, 2000);
 };
 
 // run quiz, choose question and remove it from questions bank
 function changeQuestions(qBank) {
     multiChoices.addEventListener('click', function (event) {
+    
         if (qBank.length === 0) {
             quizFinished = true;
         };
@@ -116,6 +114,9 @@ function changeQuestions(qBank) {
         multiChoices.textContent = "";
         if (!quizFinished) {
             showQuestion(question);
+            setTimeout(() => {
+                answerCheck.textContent = "";
+            }, 1500);
         }
         else {
             quizFinished = true;
