@@ -1,10 +1,10 @@
 # coding-quiz
 
-A simple coding quiz website where the user will be presented with code related questions that need to be answered in the time limit. 
+A simple coding quiz website where the user is presented with code related questions that need to be answered with in the time limit. 
 
 ## Description:
 
-The website is run by JavaScript to show a consecutive series of multiple choice questions about JavaScript. The question bank [HERE](https://github.com/abdalla-diaai/coding-quiz/blob/7d47954fea00263d03415c01332526a23fcc1932/assets/js/questions.js#L2-L43?plain=1) contains 8 questions at the moment about JavaScript only. The questions can be changed as long as format is kept in this structure as an array [] containing an object {} which contains title, choices and answer as keys. The repository contains three JavaScript files, questions; contains questions logic, logic.js; contains functions to changeClass, startTimer, finishQuiz, storeScore functions and lastly, scores.js which contains handles high score page.  
+The website is run to show a consecutive series of multiple choice questions about JavaScript. The question bank [HERE](https://github.com/abdalla-diaai/coding-quiz/blob/7d47954fea00263d03415c01332526a23fcc1932/assets/js/questions.js#L2-L43?plain=1) contains 8 questions at the moment about JavaScript only. These questions can be changed as long as format is kept in this structure as an array [] containing an object {} which contains title, choices and answer as keys. The repository contains three JavaScript files, questions; contains questions logic, logic.js; contains functions to changeClass, startTimer, finishQuiz, storeScore functions and lastly, scores.js which contains handles high score page.  
 
 ## Installation
 
