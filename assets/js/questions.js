@@ -62,8 +62,6 @@ var timerCount;
 let correct = new Audio('assets/sfx/correct.wav')
 let incorrect = new Audio('assets/sfx/incorrect.wav')
 
-correct.play()
-
 // variables to get high score items
 var finalSubmit = document.querySelector('#submit');
 var userInitials = document.querySelector('#initials');
@@ -89,7 +87,6 @@ function showQuestion(question) {
         choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
         multiChoices.append(choice);
     };
-    // to remove feedback to question after 1 second
 };
 
 // run quiz, choose question and remove it from questions bank
