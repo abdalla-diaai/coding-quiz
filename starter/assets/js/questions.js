@@ -44,20 +44,19 @@ var questionsBank = [
 
 // variables to get page items
 var startBtn = document.querySelector('#start');
+var quizTimer = document.querySelector('#time');
 var questionTitle = document.querySelector('#question-title');
 var multiChoices = document.querySelector('#choices');
-var questionsDiv = document.querySelector('#questions');
-var check = document.querySelector('#check');
-var quizTimer = document.querySelector('#time');
+var answerCheck = document.querySelector('#check');
 var finalScore = document.querySelector('#final-score');
 
 // variables for functions
 var choices = "";
-var answer = 0;
 var question = "";
-var timerCount;
+var answer = 0;
 var score = 0;
 var quizFinished = false;
+var timerCount;
 
 // variables to get high score items
 var finalSubmit = document.querySelector('#submit');
@@ -65,7 +64,8 @@ var userInitials = document.querySelector('#initials');
 
 // start quiz, hide start screen div, show questions div, choose first question
 function startQuiz() {
-    timerCount = 20;
+    // adjust quiz timer as needed
+    timerCount = 60;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
     showQuestion(questionsBank.pop());
@@ -85,8 +85,8 @@ function showQuestion(question) {
     };
     // to remove feedback to question after 1 second
     setTimeout(() => {
-        check.textContent = "";
-    }, 2000); 
+        answerCheck.textContent = "";
+    }, 2000);
 };
 
 // run quiz, choose question and remove it from questions bank
@@ -101,10 +101,10 @@ function changeQuestions(qBank) {
             var choiceNumber = choiceClicked.dataset.number;
             if (choiceNumber === answer) {
                 score += 10;
-                check.textContent = 'Correct';
+                answerCheck.textContent = 'Correct';
             }
             else {
-                check.textContent = "Incorrect";
+                answerCheck.textContent = "Incorrect";
                 timerCount -= 10;
                 if (timerCount < 0) {
                     quizFinished = true;
