@@ -12,7 +12,11 @@ NA
 
 ## Usage
 
-Simply press the start quiz button and choose an answer by clicking on it. There is a timer of 60 seconds which can be changed [HERE](https://github.com/abdalla-diaai/coding-quiz/blob/7d47954fea00263d03415c01332526a23fcc1932/assets/js/questions.js#L78?plain=1) as needed. The user will get 10 points for correct answer and penalised 10 seconds for incorrect answers. The quiz will finish if time reaches zero or the user answer all the questions. The user can include his name or name initials at the end of the quiz to eventually finish the quiz. [Link to DEPLOYED PAGE](https://abdalla-diaai.github.io/coding-quiz/index.html)
+Simply press the start quiz button and choose an answer by clicking on it. There is a timer of 60 seconds which can be changed [HERE](https://github.com/abdalla-diaai/coding-quiz/blob/7d47954fea00263d03415c01332526a23fcc1932/assets/js/questions.js#L78?plain=1) as needed. The user will get 10 points for correct answer and penalised 10 seconds for incorrect answers. The quiz will finish if time reaches zero or the user answer all the questions. The user can include his name or name initials at the end of the quiz to eventually finish the quiz. [Link to DEPLOYED PAGE](https://abdalla-diaai.github.io/coding-quiz/index.html).
+
+### Possible Issues
+
+If the user clicks quickly, there may be the possibility that a feedback for user choice either correct or incorrect may be missed. There is a sound that plays specific sound for correct and incorrect answers but it also depends on how quick the user click to answer the questions. In a good case scenario, it is assumed that the user will take more than 2 seconds to read the questions and choose an answer.
 
 ## Credit
 
