@@ -55,6 +55,13 @@ var question = "";
 var timerCount;
 var score = 0;
 var quizFinished = false;
+
+
+// high score page
+finalSubmit = document.querySelector('#submit');
+var userInitials = document.querySelector('#initials');
+
+
 // function to show and hide divs on the page
 function changeClass(id, currentClass, newClass) {
     document.querySelector(id).classList.remove(currentClass);
@@ -160,3 +167,13 @@ function finishQuiz() {
         changeClass('#end-screen', 'hide', 'visible');
         finalScore.textContent = score;
 };
+
+
+function storeScore () {
+    changeClass('#end-screen', 'visible', 'hide');
+    changeClass('#feedback', 'hide', 'visible');
+    localStorage.setItem("final-score", score);
+    localStorage.setItem('user-initials', userInitials.value);
+}
+
+finalSubmit.addEventListener('click', storeScore);
