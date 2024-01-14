@@ -1,60 +1,133 @@
-var questionsBank = {
-    question1: {
-        title: 'Which of the following is not a valid JavaScript loop statement?',
-        choices: ['for', 'while', 'do…while', 'until'],
+// object to hold questions and answers
+var questionsBank = [
+    {
+        title: 'With JavaScript, which of the following is true if x and y are not equal?',
+        choices: ['if x!=y', 'if (x!=y)', 'if x not=y'],
+        answer: 2
+    },
+    {
+        title: 'With JavaScript, the first control statement in a for loop usually does what?',
+        choices: ['sets the termination condition', 'increments a counter', 'creates a control variable'],
+        answer: 3
+    },
+    {
+        title: ' What is the correct JavaScript syntax to change the content of the HTML element below? <p id="demo">This is a demonstration</p>',
+        choices: ['document.getElementByName("p").innerHTML = "Hello World";', 'document.getElementById("demo").innerHTML = "Hello World";', 'document.getElement("p").innerHTML = "Hello World";', '#demo.innerHTML = "Hello World";'],
+        answer: 2
+    },
+    {
+        title: 'How many buttons are there in a JavaScript alert box?',
+        choices: ['One', 'Two', 'None'],
+        answer: 2
+    },
+    {
+        title: ' Which event is triggered when a form field is changed?',
+        choices: ['onsubmit', 'onblur', 'onclick', 'onchange'],
         answer: 4
     },
-    question2: {
-        title: 'What is the purpose of the splice() method in JavaScript?',
-        choices: ['To add elements to an array', 'To remove elements from an array', 'To replace elements in an array', 'All of the above'],
-        answer: 4
+    {
+        title: "With JavaScript, look at the following code: var x='Anna'; var y=30; x=y; Variable 'x' now contains?",
+        choices: ['a text', 'a number', 'a boolean'],
+        answer: 1
     },
-    question3: {
-        title: 'What is the result of the following code? var x = 5; x++;',
-        choices: ['x is now 4', 'x is now 5', 'x is now 6', 'None of the above'],
-        answer: 4
+    {
+        title: "With JavaScript, how do you round the number 7.25 to the nearest integer?",
+        choices: ['Math.round(7.25)', 'Math.floor(7.25)', 'Math.ceil(7.25)'],
+        answer: 1
+    },
+    {
+        title: "With JavaScript, how can you find the number with the highest value of x and y?",
+        choices: ['Math.max(x,y)', 'Math.ceil(x,y)', 'Math.top(x,y)'],
+        answer: 1
     }
-};
+];
 
-// variable to store user answer
-var answer = 0
+// variables to get page items
+var startBtn = document.querySelector('#start');
+var questionTitle = document.querySelector('#question-title');
+var multiChoices = document.querySelector('#choices');
+var questionsDiv = document.querySelector('#questions');
+var check = document.querySelector('#check');
+var quizTimer = document.querySelector('#time');
+var finalScore = document.querySelector('#final-score');
 
-// function to show question and hide start
-function showQuestion() {
+// variables for functions
+var choices = "";
+var answer = 0;
+var question = "";
+var timerCount;
+var score = 0;
+var quizFinished = false;
+
+// variables to get high score items
+var finalSubmit = document.querySelector('#submit');
+var userInitials = document.querySelector('#initials');
+
+// start quiz, hide start screen div, show questions div, choose first question
+function startQuiz() {
+    timerCount = 20;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
-    var question = questionsBank.question1;
-    console.log(JSON.stringify(question.title));
-    const qTitle = document.createElement('div');
-    qTitle.innerHTML = JSON.stringify(question.title);
-    document.querySelector('#question-title').append(qTitle);
+    showQuestion(questionsBank.pop());
+    startTimer();
+};
 
-    const choices = JSON.parse(JSON.stringify(question.choices));
+// function to show question and hide start
+function showQuestion(question) {
+    questionTitle.textContent = JSON.parse(JSON.stringify(question.title));
+    choices = JSON.parse(JSON.stringify(question.choices));
     answer = JSON.stringify(question.answer);
-    const choicesList = document.createElement('ul');
-    for (var i = 0; i < choices.length; i++){
-        const choice = document.createElement('ol');
-        choice.setAttribute('data-number', i+1);
-        choice.innerHTML = `${choice.dataset.number}. ${choices[i]}`;
-        choicesList.append(choice);
+    for (var i = 0; i < choices.length; i++) {
+        const choice = document.createElement('button');
+        choice.setAttribute('data-number', i + 1);
+        choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
+        multiChoices.append(choice);
     };
-    document.querySelector('#choices').append(choicesList);
+    // to remove feedback to question after 1 second
+    setTimeout(() => {
+        check.textContent = "";
+    }, 2000); 
 };
 
-document.querySelector('#start').addEventListener('click', showQuestion);
-
-// function to check answer
-function checkAnswer(event) {
-    var choiceClicked = event.target;
-    var choiceNumber = choiceClicked.dataset.number;
-    console.log(choiceNumber);
-    const choiceAnswer = document.createElement('span');
-    if (answer == choiceNumber){
-        choiceAnswer.innerHTML = 'Correct';
-    }
-    else {
-        choiceAnswer.innerHTML = 'Wrong';
-    }
-    document.querySelector('#questions').append(choiceAnswer);
+// run quiz, choose question and remove it from questions bank
+function changeQuestions(qBank) {
+    multiChoices.addEventListener('click', function (event) {
+        if (qBank.length === 0) {
+            quizFinished = true;
+        };
+        question = qBank.pop();
+        if (event.target.matches('button') === true) {
+            var choiceClicked = event.target;
+            var choiceNumber = choiceClicked.dataset.number;
+            if (choiceNumber === answer) {
+                score += 10;
+                check.textContent = 'Correct';
+            }
+            else {
+                check.textContent = "Incorrect";
+                timerCount -= 10;
+                if (timerCount < 0) {
+                    quizFinished = true;
+                    finishQuiz();
+                }
+            };
+        };
+        questionTitle.textContent = "";
+        multiChoices.textContent = "";
+        if (!quizFinished) {
+            showQuestion(question);
+        }
+        else {
+            quizFinished = true;
+            finishQuiz();
+        };
+    });
 };
-document.querySelector('#choices').addEventListener('click', checkAnswer);
+
+// start game when start button is clicked and show first question
+startBtn.addEventListener('click', startQuiz);
+
+// show next questions and check answers
+changeQuestions(questionsBank);
+
+
