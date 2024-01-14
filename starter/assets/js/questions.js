@@ -42,13 +42,19 @@ var questionBank = [
 ];
 
 var startBtn = document.querySelector('#start');
-var qChosen = [];
 var questionTitle = document.querySelector('#question-title');
 var multiChoices = document.querySelector('#choices');
 var questionsDiv = document.querySelector('#questions');
+var check = document.querySelector('#check');
+var choices = "";
+var quizTimer = document.querySelector('#time');
+var finalScore = document.querySelector('#final-score');
 // variable to store user answer
 var answer = 0;
-
+var question = "";
+var timerCount;
+var score = 0;
+var quizFinished = false;
 // function to show and hide divs on the page
 function changeClass(id, currentClass, newClass) {
     document.querySelector(id).classList.remove(currentClass);
@@ -56,70 +62,101 @@ function changeClass(id, currentClass, newClass) {
 };
 
 // start quiz
-startBtn.addEventListener('click', function () {
+function startQuiz() {
+    timerCount = 20;
+    document.querySelector('#start-screen').classList.add('hide');
+    changeClass('#questions', 'hide', 'visible');
     showQuestion(questionBank[0]);
-});
+    startTimer();
 
+};
+startBtn.addEventListener('click', startQuiz);
 
 
 // function to show question and hide start
 function showQuestion(question) {
-    document.querySelector('#start-screen').classList.add('hide');
-    changeClass('#questions', 'hide', 'visible');
-    var qTitle = document.createElement('div');
-    questionTitle.append(qTitle);
-    qTitle.textContent = JSON.stringify(question.title);
-
-    var choices = JSON.parse(JSON.stringify(question.choices));
+    questionTitle.textContent = JSON.parse(JSON.stringify(question.title));
+    choices = JSON.parse(JSON.stringify(question.choices));
     answer = JSON.stringify(question.answer);
-    const choicesList = document.createElement('ul');
-    multiChoices.append(choicesList);
     for (var i = 0; i < choices.length; i++) {
-        const choice = document.createElement('ol');
+        const choice = document.createElement('button');
         choice.setAttribute('data-number', i + 1);
         choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
-        choicesList.append(choice);
+        multiChoices.append(choice);
     };
-    if (!newDiv) {
-        
-    }
-    var newDiv = document.createElement('div');
-    newDiv.setAttribute("id", "correct");
-    multiChoices.append(newDiv);
+};
+
+function runQuiz(qBank) {
+
     multiChoices.addEventListener('click', function (event) {
+        if (qBank.length === 0) {
+            quizFinished = true;
+        };
+        question = qBank.pop();
+        if (event.target.matches('button') === true) {
             var choiceClicked = event.target;
             var choiceNumber = choiceClicked.dataset.number;
-            var newDiv = document.querySelector('#correct');
+
             if (choiceNumber === answer) {
-                newDiv.innerHTML = "correct";
+                score += 5;
             }
             else {
-                newDiv.innerHTML = "incorrect";
-            }
-        });
-};
-var qChosen = [];
-function runQuiz(qBank) {
-    
-    multiChoices.addEventListener('click', function () {
-        var question = qBank[Math.floor(Math.random() * qBank.length)];
-        if (qChosen.includes(question.title)) {
-            question = qBank[Math.floor(Math.random() * qBank.length)];
-        }
-        else {
-            questionTitle.textContent = "";
-            multiChoices.textContent = "";
+                timerCount -= 5;
+                if (timerCount < 0) {
+                    quizFinished = true;
+                    finishQuiz();
+                }
+            };
+
+        };
+        questionTitle.textContent = "";
+        multiChoices.textContent = "";
+        if (!quizFinished) {
             showQuestion(question);
         }
-        if (qChosen.length === qBank.length) {
-            changeClass('#questions', 'visible', 'hide');
-            changeClass('#end-screen', 'hide', 'visible');
-            return;
+        else {
+            quizFinished = true;
+            finishQuiz()
         }
-        qChosen.push(question.title);
     });
 };
 
 runQuiz(questionBank);
 
+// The setTimer function starts and stops the timer and triggers winGame() and loseGame()
+function startTimer() {
+    // Sets timer
+    timer = setInterval(function () {
+        timerCount--;
+        if (timerCount > 0) {
+            quizTimer.textContent = timerCount;
+        }
+        else {
+            quizTimer.textContent = 0;
+        }
+        // Tests if time has run out
+        if (timerCount >= 0) {
+            if (quizFinished) {
+                clearInterval(timer);
+                finishQuiz()
+            };
+        }
+        else if (timerCount === 0) {
+            // Clears interval
+            clearInterval(timer);
+            finishQuiz()
+        }
+        else {
+            clearInterval(timer);
+            finishQuiz();
+        }
 
+
+    }, 1000);
+};
+
+function finishQuiz() {
+        changeClass('#questions', 'visible', 'hide');
+        changeClass('#end-screen', 'hide', 'visible');
+        finalScore.textContent = score;
+};
