@@ -16,7 +16,8 @@ Simply press the start quiz button and choose an answer by clicking on it. There
 
 ### Possible Issues
 
-If the user clicks quickly, there may be the possibility that a feedback for user choice either correct or incorrect may be missed. There is a sound that plays specific sound for correct and incorrect answers but it also depends on how quick the user click to answer the questions. In a good case scenario, it is assumed that the user will take more than 2 seconds to read the questions and choose an answer.
+1. If the user clicks quickly, there may be the possibility that a feedback for user choice either correct or incorrect may be missed. There is a sound that plays specific sound for correct and incorrect answers but it also depends on how quick the user click to answer the questions. In a good case scenario, it is assumed that the user will take more than 2 seconds to read the questions and choose an answer.
+2. Another issue is that the questions are shown in an order from the end to the start. There is an open issue for that. I may need to use a different way like a loop or choosing questions randomly. I will work on this and update the repository in the future. 
 
 ## Credit
 
