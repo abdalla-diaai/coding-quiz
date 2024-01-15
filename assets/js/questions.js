@@ -92,43 +92,42 @@ function showQuestion(question) {
 // run quiz, choose question and remove it from questions bank
 function changeQuestions(qBank) {
     multiChoices.addEventListener('click', function (event) {
-        if (qBank.length === 0) {
-            quizFinished = true;
-        };
-        question = qBank.pop();
-        if (event.target.matches('button') === true) {
-            var choiceClicked = event.target;
-            var choiceNumber = choiceClicked.dataset.number;
-            if (choiceNumber === answer) {
-                score += 10;
-                userAnswer = 'Correct';
-                // play correct sound
-                correct.play()
-            }
-            else {
-                userAnswer = "Incorrect";
-                // play incorrect sound
-                incorrect.play()
-                timerCount -= 10;
-                if (timerCount < 0) {
-                    quizFinished = true;
-                    finishQuiz();
-                }
-            };
-        };
-        questionTitle.textContent = "";
-        multiChoices.textContent = "";
-        if (!quizFinished) {
-            showQuestion(question);
-            setTimeout(() => {
-                answerCheck.textContent = "";
-            }, 1500);
-        }
-        else {
+        event.stopPropagation();
+        if (timerCount === 0 || qBank.length === 0) {
             quizFinished = true;
             finishQuiz();
+        }
+        else {
+            question = qBank.pop();
+            questionTitle.textContent = "";
+            multiChoices.textContent = "";
+            showQuestion(question);
+            var choiceClicked = event.target;
+            if (choiceClicked.matches('button') === true) {
+                var choiceNumber = choiceClicked.dataset.number;
+                if (choiceNumber === answer) {
+                    score += 10;
+                    userAnswer = 'Correct';
+                    // play correct sound
+                    correct.play()
+                }
+                else {
+                    userAnswer = "Incorrect";
+                    // play incorrect sound
+                    incorrect.play()
+                    timerCount -= 10;
+                    if (timerCount === 0) {
+                        finishQuiz();
+                    };
+                };
+                setTimeout(() => {
+                    answerCheck.textContent = "";
+                }, 1500);
+                answerCheck.textContent = userAnswer;
+
+            };
+
         };
-        answerCheck.textContent = userAnswer;
     });
 };
 
@@ -138,4 +137,10 @@ startBtn.addEventListener('click', startQuiz);
 // show next questions and check answers
 changeQuestions(questionsBank);
 
-
+// add final score to DOM
+function finishQuiz() {
+    changeClass('#questions', 'visible', 'hide');
+    changeClass('#end-screen', 'hide', 'visible');
+    quizTimer.classList.remove('fade-text');
+    finalScore.textContent = score;
+};

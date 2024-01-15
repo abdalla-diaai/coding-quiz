@@ -41,13 +41,6 @@ function startTimer() {
     }, 1000);
 };
 
-// add final score to DOM
-function finishQuiz() {
-    changeClass('#questions', 'visible', 'hide');
-    changeClass('#end-screen', 'hide', 'visible');
-    quizTimer.classList.remove('fade-text');
-    finalScore.textContent = score;
-};
 
 // hide end screen div and show feedback div
 function storeScore() {
