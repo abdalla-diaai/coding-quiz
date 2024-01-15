@@ -55,8 +55,9 @@ var question = "";
 var answer = 0;
 var score = 0;
 var quizFinished = false;
-var timerCount;
+var timerCount = 60;
 var userAnswer = "";
+var questionNumber = 1;
 
 // audio sounds
 let correct = new Audio('assets/sfx/correct.wav')
@@ -69,7 +70,6 @@ var userInitials = document.querySelector('#initials');
 // start quiz, hide start screen div, show questions div, choose first question
 function startQuiz() {
     // adjust quiz timer as needed
-    timerCount = 60;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
     question = questionsBank.pop();
@@ -84,16 +84,18 @@ function showQuestion(question) {
         finishQuiz();
     }
     else {
-        questionTitle.textContent = JSON.parse(JSON.stringify(question.title));
+        questionTitle.textContent = `${questionNumber}. ${JSON.parse(JSON.stringify(question.title))}`;
         choices = JSON.parse(JSON.stringify(question.choices));
         answer = JSON.stringify(question.answer);
         for (var i = 0; i < choices.length; i++) {
             const choice = document.createElement('button');
             choice.setAttribute('data-number', i + 1);
+            choice.setAttribute('class', "choice-button");
             choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
             multiChoices.append(choice);
         };
     };
+    questionNumber += 1;
 };
 
 // run quiz, choose question and remove it from questions bank
@@ -105,39 +107,37 @@ function changeQuestions(qBank) {
             finishQuiz();
         }
         else {
-            checkAnswer(event);
-            
-            questionTitle.textContent = "";
-            multiChoices.textContent = "";
-            setTimeout(() => {
-                answerCheck.textContent = "";
-            }, 1500);
-            answerCheck.textContent = userAnswer;
-            question = qBank.pop();
-            showQuestion(question);
+            var choiceClicked = event.target;
+            if (choiceClicked.matches('button') === true) {
+                checkAnswer(choiceClicked);
+                questionTitle.textContent = "";
+                multiChoices.textContent = "";
+                setTimeout(() => {
+                    answerCheck.textContent = "";
+                }, 1500);
+                answerCheck.textContent = userAnswer;
+                question = qBank.pop();
+                showQuestion(question);
+            };
         };
     });
 };
 
 // function to check user answer
-function checkAnswer(event) {
-    var choiceClicked = event.target;
-    if (choiceClicked.matches('button') === true) {
-        var choiceNumber = choiceClicked.dataset.number;
-        if (choiceNumber === answer) {
-            correct.play()
-            score += 10;
-            userAnswer = 'Correct';
-            // play correct sound
-        }
-        else {
-            incorrect.play()
-            userAnswer = "Incorrect";
-            // play incorrect sound
-            timerCount -= 10;
-            if (timerCount === 0) {
-                finishQuiz();
-            };
+function checkAnswer(choiceClicked) {
+    if (choiceClicked.dataset.number === answer) {
+        correct.play()
+        score += 10;
+        userAnswer = 'Correct';
+        // play correct sound
+    }
+    else {
+        incorrect.play()
+        userAnswer = "Incorrect";
+        // play incorrect sound
+        timerCount -= 10;
+        if (timerCount === 0) {
+            finishQuiz();
         };
     };
 };
