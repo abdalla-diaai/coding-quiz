@@ -72,20 +72,27 @@ function startQuiz() {
     timerCount = 60;
     document.querySelector('#start-screen').classList.add('hide');
     changeClass('#questions', 'hide', 'visible');
-    showQuestion(questionsBank.pop());
+    question = questionsBank.pop();
+    showQuestion(question);
     startTimer();
 };
 
 // function to show question and hide start
 function showQuestion(question) {
-    questionTitle.textContent = JSON.parse(JSON.stringify(question.title));
-    choices = JSON.parse(JSON.stringify(question.choices));
-    answer = JSON.stringify(question.answer);
-    for (var i = 0; i < choices.length; i++) {
-        const choice = document.createElement('button');
-        choice.setAttribute('data-number', i + 1);
-        choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
-        multiChoices.append(choice);
+    if (!question) {
+        quizFinished = true;
+        finishQuiz();
+    }
+    else {
+        questionTitle.textContent = JSON.parse(JSON.stringify(question.title));
+        choices = JSON.parse(JSON.stringify(question.choices));
+        answer = JSON.stringify(question.answer);
+        for (var i = 0; i < choices.length; i++) {
+            const choice = document.createElement('button');
+            choice.setAttribute('data-number', i + 1);
+            choice.textContent = `${choice.dataset.number}. ${choices[i]}`;
+            multiChoices.append(choice);
+        };
     };
 };
 
@@ -93,49 +100,47 @@ function showQuestion(question) {
 function changeQuestions(qBank) {
     multiChoices.addEventListener('click', function (event) {
         event.stopPropagation();
-        if (timerCount === 0 || qBank.length === 0) {
+        if (timerCount === 0) {
             quizFinished = true;
             finishQuiz();
         }
         else {
-            question = qBank.pop();
+            checkAnswer(event);
+            
             questionTitle.textContent = "";
             multiChoices.textContent = "";
+            setTimeout(() => {
+                answerCheck.textContent = "";
+            }, 1500);
+            answerCheck.textContent = userAnswer;
+            question = qBank.pop();
             showQuestion(question);
-            var choiceClicked = event.target;
-            if (choiceClicked.matches('button') === true) {
-                var choiceNumber = choiceClicked.dataset.number;
-                if (choiceNumber === answer) {
-                    score += 10;
-                    userAnswer = 'Correct';
-                    // play correct sound
-                    correct.play()
-                }
-                else {
-                    userAnswer = "Incorrect";
-                    // play incorrect sound
-                    incorrect.play()
-                    timerCount -= 10;
-                    if (timerCount === 0) {
-                        finishQuiz();
-                    };
-                };
-                setTimeout(() => {
-                    answerCheck.textContent = "";
-                }, 1500);
-                answerCheck.textContent = userAnswer;
-
-            };
-
         };
     });
 };
 
-// start game when start button is clicked and show first question
-startBtn.addEventListener('click', startQuiz);
-
-// show next questions and check answers
-changeQuestions(questionsBank);
+// function to check user answer
+function checkAnswer(event) {
+    var choiceClicked = event.target;
+    if (choiceClicked.matches('button') === true) {
+        var choiceNumber = choiceClicked.dataset.number;
+        if (choiceNumber === answer) {
+            correct.play()
+            score += 10;
+            userAnswer = 'Correct';
+            // play correct sound
+        }
+        else {
+            incorrect.play()
+            userAnswer = "Incorrect";
+            // play incorrect sound
+            timerCount -= 10;
+            if (timerCount === 0) {
+                finishQuiz();
+            };
+        };
+    };
+};
 
 // add final score to DOM
 function finishQuiz() {
@@ -144,3 +149,9 @@ function finishQuiz() {
     quizTimer.classList.remove('fade-text');
     finalScore.textContent = score;
 };
+
+// start game when start button is clicked and show first question
+startBtn.addEventListener('click', startQuiz);
+
+// show next questions and check answers
+changeQuestions(questionsBank);
