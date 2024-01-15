@@ -1,3 +1,6 @@
+var timerText = document.querySelector('#time');
+var quizTimer = document.querySelector('.timer');
+
 // function to show and hide divs on the page
 function changeClass(id, currentClass, newClass) {
     document.querySelector(id).classList.remove(currentClass);
@@ -10,17 +13,21 @@ function startTimer() {
     timer = setInterval(function () {
         timerCount--;
         if (timerCount > 0) {
-            quizTimer.textContent = timerCount;
+            timerText.textContent = timerCount;
         }
         else {
-            quizTimer.textContent = 0;
+            timerText.textContent = 0;
         }
         // Tests if time has run out
         if (timerCount >= 0) {
             if (quizFinished) {
                 clearInterval(timer);
                 finishQuiz()
-            };
+            }
+            if (timerCount > 0 && timerCount < 10) {
+                quizTimer.style.color = 'red';
+                quizTimer.classList.add('fade-text');
+            }
         }
         else if (timerCount === 0) {
             // Clears interval
@@ -38,6 +45,7 @@ function startTimer() {
 function finishQuiz() {
     changeClass('#questions', 'visible', 'hide');
     changeClass('#end-screen', 'hide', 'visible');
+    quizTimer.classList.remove('fade-text');
     finalScore.textContent = score;
 };
 

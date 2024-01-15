@@ -44,7 +44,6 @@ var questionsBank = [
 
 // variables to get page items
 var startBtn = document.querySelector('#start');
-var quizTimer = document.querySelector('#time');
 var questionTitle = document.querySelector('#question-title');
 var multiChoices = document.querySelector('#choices');
 var answerCheck = document.querySelector('#check');
