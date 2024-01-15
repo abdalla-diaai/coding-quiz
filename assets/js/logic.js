@@ -9,6 +9,8 @@ function changeClass(id, currentClass, newClass) {
 
 // function to start timer, finish quiz if timer reaches zero or questions finished.
 function startTimer() {
+    // show timer
+    changeClass('#timer-id', 'hide', 'visible');
     // Sets timer
     timer = setInterval(function () {
         timerCount--;
