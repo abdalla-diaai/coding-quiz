@@ -16,6 +16,11 @@ var questionsBank = [
         answer: 2
     },
     {
+        title: "With JavaScript, how do you round the number 7.25 to the nearest integer?",
+        choices: ['Math.round(7.25)', 'Math.floor(7.25)', 'Math.ceil(7.25)'],
+        answer: 1
+    },
+    {
         title: 'How many buttons are there in a JavaScript alert box?',
         choices: ['One', 'Two', 'None'],
         answer: 2
@@ -28,11 +33,6 @@ var questionsBank = [
     {
         title: "With JavaScript, look at the following code: var x='Anna'; var y=30; x=y; Variable 'x' now contains?",
         choices: ['a text', 'a number', 'a boolean'],
-        answer: 1
-    },
-    {
-        title: "With JavaScript, how do you round the number 7.25 to the nearest integer?",
-        choices: ['Math.round(7.25)', 'Math.floor(7.25)', 'Math.ceil(7.25)'],
         answer: 1
     },
     {
@@ -98,31 +98,6 @@ function showQuestion(question) {
     questionNumber += 1;
 };
 
-// run quiz, choose question and remove it from questions bank
-function changeQuestions(qBank) {
-    multiChoices.addEventListener('click', function (event) {
-        event.stopPropagation();
-        if (timerCount === 0) {
-            quizFinished = true;
-            finishQuiz();
-        }
-        else {
-            var choiceClicked = event.target;
-            if (choiceClicked.matches('button') === true) {
-                checkAnswer(choiceClicked);
-                questionTitle.textContent = "";
-                multiChoices.textContent = "";
-                setTimeout(() => {
-                    answerCheck.textContent = "";
-                }, 1500);
-                answerCheck.textContent = userAnswer;
-                question = qBank.pop();
-                showQuestion(question);
-            };
-        };
-    });
-};
-
 // function to check user answer
 function checkAnswer(choiceClicked) {
     if (choiceClicked.dataset.number === answer) {
@@ -148,6 +123,31 @@ function finishQuiz() {
     changeClass('#end-screen', 'hide', 'visible');
     quizTimer.classList.remove('fade-text');
     finalScore.textContent = score;
+};
+
+// run quiz, choose question and remove it from questions bank
+function changeQuestions(qBank) {
+    multiChoices.addEventListener('click', function (event) {
+        event.stopPropagation();
+        if (timerCount === 0) {
+            quizFinished = true;
+            finishQuiz();
+        }
+        else {
+            var choiceClicked = event.target;
+            if (choiceClicked.matches('button') === true) {
+                checkAnswer(choiceClicked);
+                questionTitle.textContent = "";
+                multiChoices.textContent = "";
+                setTimeout(() => {
+                    answerCheck.textContent = "";
+                }, 1500);
+                answerCheck.textContent = userAnswer;
+                question = qBank.pop();
+                showQuestion(question);
+            };
+        };
+    });
 };
 
 // start game when start button is clicked and show first question
